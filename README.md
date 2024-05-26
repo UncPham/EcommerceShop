@@ -63,23 +63,6 @@ Vui lòng đọc [hướng dẫn đóng góp](CONTRIBUTING.md) để biết thê
 
 Liệt kê và mô tả các phiên bản phát hành của ECommerceShop.
 
-## Demo và Báo Cáo
-
-- [Demo Sản Phẩm](https://drive.google.com/drive/folders/14VCYSZzuCpsX3oBiUTa81Ff3sKRaLGD-?usp=sharing)  
-- [Báo Cáo](https://drive.google.com/drive/folders/14VCYSZzuCpsX3oBiUTa81Ff3sKRaLGD-?usp=sharing)
-
-## Tác Giả
-
-- Hồ Lê Dương
-  - MSSV: 22022641
-  - Email: 22022641@vnu.edu.vn
-  - GitHub: [NoBiTaD](https://github.com/duongllhtuet)
-
-- Phạm Chiến
-  - MSSV: 22022634
-  - Email: 22022634@vnu.edu.vn
-  - GitHub: [phamchien](https://github.com/phamchien)
-
 ## Giấy Phép
 
 Dự án này được cấp phép theo [Tên Giấy Phép](LICENSE) - xem tệp LICENSE để biết chi tiết.
