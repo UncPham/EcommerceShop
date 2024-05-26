@@ -6,6 +6,7 @@ import axios from "axios";
 import { assets } from "../../assets/assets";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartPlus } from '@fortawesome/free-solid-svg-icons'
+import ProductItem from "../../components/productItem/ProductItem.jsx";
 
 const Product = () => {
   const { id } = useParams();
@@ -13,10 +14,11 @@ const Product = () => {
   const { addToCart, url } = useContext(StoreContext);
 
   const [data, setData] = useState([]);
-
+  const [recommendations, setRecommendations] = useState([]);
   const [size, setSize] = useState("M");
   const [quantity, setQuantity] = useState(1);
   const [averageRating, setAverageRating] = useState(null);
+  const [fullItem, setFullItem] = useState([]);
 
   const fetchProduct = async () => {
     const response = await axios.get(url + `/api/product/${id}`);
@@ -27,36 +29,55 @@ const Product = () => {
     }
   };
 
-  useEffect(() => {
-    fetchProduct();
+  // Fetch đề xuất món ăn từ API
+  const fetchRecommendations = async () => {
+    try {      
+        const response = await axios.get(`http://localhost:4040/recommend/?product_id=${id}`)
 
-    const calculateAverageRating = () => {
-      if (data.ratings && data.ratings.length > 0) {
-        let total = 0;
-        data.ratings.forEach((rate) => {
-          total += rate.rating;
-        });
-        return (total / data.ratings.length).toFixed(1);
+        if (response.status === 200) {
+            setRecommendations(response.data.recommendations);
+            fetchItem(response.data.recommendations)
+        } else {
+            console.log("Error fetching recommendations");
+        }
+    } catch (error) {
+        console.log("Error:", error);
+    }
+};
+
+// Fetch thông tin các món ăn đề xuất từ API
+const fetchItem = async (list) => {
+  const item = []
+  for (let i = 0; i < list.length; i++) {
+      const response = await axios.get(url + `/api/product/${list[i]}`)
+      if (response.status === 200) {
+          item.push(response.data.data)
+      } else {
+          console.log("Can not find item")
       }
-      return null;
-    };
+  }
+  setFullItem(item)
+}
 
-    setAverageRating(calculateAverageRating());
-  });
+useEffect(() => {
+  fetchProduct();
+  fetchRecommendations();
+  window.scrollTo(0, 0);
+}, [id]);
+
+useEffect(() => {
+  if (data.ratings && data.ratings.length > 0) {
+    const total = data.ratings.reduce((acc, rate) => acc + rate.rating, 0);
+    setAverageRating((total / data.ratings.length).toFixed(1));
+  } else {
+    setAverageRating(null);
+  }
+}, [data]);
 
   const onChangeHandler = (event) => {
     let value = event.target.value;
     value = Math.max(1, value);
     setQuantity(value);
-  };
-
-  const calculateAverageRating = async () => {
-    let total = 0;
-    data.ratings.map((rate, index) => {
-      total += rate.rating;
-    });
-    console.log((total / data.ratings.length).toFixed(1));
-    return (total / data.ratings.length).toFixed(1);
   };
 
   return (
@@ -127,11 +148,11 @@ const Product = () => {
               <div className="row">
                 <div className="col l-12 m-12 c-12">
                   <div className="row sm--gutter product__option--size">
-                    <div className="col l-4 m-12 product__option--size--name">
+                    <div className="col l-4 product__option--size--name">
                       Size
                     </div>
 
-                    <div className="col l-8 m-12 c-12 product__option--size--select">
+                    <div className="col l-8 product__option--size--select">
                       <div className="col l-4 m-4 c-4">
                         <button
                           onClick={() => setSize((prev) => "M")}
@@ -214,7 +235,7 @@ const Product = () => {
           <div className="Product-Rating">
             <div className="Product-Rating__Header">ĐÁNH GIÁ SẢN PHẨM</div>
 
-            {data.ratings && data.ratings.length > 0 ? (
+            {averageRating ? (
               <>
                 <div className="row product--rating--score">
                   <div className="col l-12 m-12 c-12">
@@ -246,6 +267,28 @@ const Product = () => {
             ) : (
               <span>Không có đánh giá</span>
             )}
+          </div>
+          <div className="recommend-item">
+              <h2>Gợi ý</h2>
+              <hr />
+              <div className="recommend-list">
+                  {fullItem.length > 0 ? (
+                      fullItem.map((item) => (
+                        <div key={item._id} className="col l-2-4 m-4 c-6">
+                          <ProductItem 
+                            id={item._id}
+                            name={item.name}
+                            description={item.description}
+                            price={item.price}
+                            image={item.picture}
+                            selling={item.selling}
+                          />
+                        </div>
+                      ))
+                  ) : (
+                      <p>Không có gợi ý nào</p>
+                  )}
+              </div>
           </div>
         </div>
       </div>
