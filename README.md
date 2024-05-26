@@ -80,11 +80,6 @@ Liệt kê và mô tả các phiên bản phát hành của ECommerceShop.
   - Email: 22022634@vnu.edu.vn
   - GitHub: [phamchien](https://github.com/phamchien)
 
-- Bùi Trọng Anh
-  - MSSV: 22022572
-  - Email: 22022572@vnu.edu.vn
-  - GitHub: [tronganh0104](https://github.com/tronganh0104)
-
 ## Giấy Phép
 
 Dự án này được cấp phép theo [Tên Giấy Phép](LICENSE) - xem tệp LICENSE để biết chi tiết.
