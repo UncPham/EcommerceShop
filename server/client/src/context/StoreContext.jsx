@@ -10,7 +10,7 @@ const StoreContextProvider = (props) => {
     const [cartItems, setCartItems] = useState([
         { productId: "", quantity: "", size: "" }
     ]);
-    const url = "http://localhost:4000";
+    const url = "https://ecommerceshop-rtet.onrender.com/" || "http://localhost:4000";
     const [token, setToken] = useState("");
     const [product_list, setProductList] = useState([])
 
