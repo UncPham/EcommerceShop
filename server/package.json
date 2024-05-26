@@ -5,14 +5,16 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "server": "nodemon app.js",
-    "build": "npm install --prefix ./client && npm run build --prefix ./client && npm install"
+    "server": "concurrently \"nodemon app.js\" \"npm run model\"",
+    "build": "npm install --prefix ./client && npm run build --prefix ./client && npm install && pip install -r recommendations/requirements.txt",
+    "model": "cd recommendations && python -m uvicorn main:app --reload --port 4040"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
+    "concurrently": "^8.2.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
