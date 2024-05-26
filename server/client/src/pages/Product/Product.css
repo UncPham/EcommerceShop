@@ -266,6 +266,11 @@
     border-bottom: 1px solid #ddd;
 }
 
+.Product-Rating__List-Empty {
+    font-size: 1.4rem;
+    font-weight: 400;
+}
+
 .Product-Rating__Main {
     display: flex;
     flex-direction: column;
@@ -290,10 +295,22 @@
     color: #333;
 }
 
+.recommend-item {
+    background-color: var(--white-color);
+    width: 100%;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: var(--white-color);
+    width: 100%;
+    margin-bottom: 20px;
+}
+
 .recommend-item h2{
     font-size: 30px;
     font-weight: 500;
     margin-bottom: 10px;
+    text-decoration: none;
 }
 
 .recommend-list {
@@ -303,3 +320,21 @@
     gap: 30px;
     row-gap: 50px;
 }
+
+.recommend-list-empty {
+    font-size: 1.4rem;
+    font-weight: 400;
+}
+
+.Home--Product--Items.modify--for--recommendation {
+    background-color: #00000008;
+    margin-top: 10px;
+    position: relative;
+    border-radius: 2px;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 30%);
+    transition: transform linear 0.1s;
+    will-change: transform;
+    display: block;
+    text-decoration: none;
+}
+

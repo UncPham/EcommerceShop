@@ -10,7 +10,7 @@ const ProductItem = ({ id, name, price, description, image, selling }) => {
 
   return (
     <div>
-        <div className="Home--Product--Items">
+        <div className="Home--Product--Items modify--for--recommendation">
             <img className="Home--Product--Item__Img" src={url + "/images/"+ image} alt="" />
 
             <Link className="Home--Product--Item__Name" to={`/product/${id}`}>{name}</Link>

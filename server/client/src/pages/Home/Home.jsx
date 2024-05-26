@@ -36,11 +36,11 @@ const Home = () => {
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) {
-        setProductsPerRow(5); // large screens
+        setProductsPerRow(5); 
       } else if (window.innerWidth >= 740 && window.innerWidth <= 1023) {
-        setProductsPerRow(3); // medium screens (tablets)
+        setProductsPerRow(3); 
       } else {
-        setProductsPerRow(2); // small screens (mobiles)
+        setProductsPerRow(2); 
       }
     };
 

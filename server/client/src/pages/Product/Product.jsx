@@ -4,8 +4,8 @@ import { StoreContext } from "../../context/StoreContext";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { assets } from "../../assets/assets";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartPlus } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
 import ProductItem from "../../components/productItem/ProductItem.jsx";
 
 const Product = () => {
@@ -29,50 +29,50 @@ const Product = () => {
     }
   };
 
-  // Fetch đề xuất món ăn từ API
   const fetchRecommendations = async () => {
-    try {      
-        const response = await axios.get(`http://localhost:4040/recommend/?product_id=${id}`)
+    try {
+      const response = await axios.get(
+        `http://localhost:4040/recommend/?product_id=${id}`
+      );
 
-        if (response.status === 200) {
-            setRecommendations(response.data.recommendations);
-            fetchItem(response.data.recommendations)
-        } else {
-            console.log("Error fetching recommendations");
-        }
-    } catch (error) {
-        console.log("Error:", error);
-    }
-};
-
-// Fetch thông tin các món ăn đề xuất từ API
-const fetchItem = async (list) => {
-  const item = []
-  for (let i = 0; i < list.length; i++) {
-      const response = await axios.get(url + `/api/product/${list[i]}`)
       if (response.status === 200) {
-          item.push(response.data.data)
+        setRecommendations(response.data.recommendations);
+        fetchItem(response.data.recommendations);
       } else {
-          console.log("Can not find item")
+        console.log("Error fetching recommendations");
       }
-  }
-  setFullItem(item)
-}
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
 
-useEffect(() => {
-  fetchProduct();
-  fetchRecommendations();
-  window.scrollTo(0, 0);
-}, [id]);
+  const fetchItem = async (list) => {
+    const item = [];
+    for (let i = 0; i < list.length; i++) {
+      const response = await axios.get(url + `/api/product/${list[i]}`);
+      if (response.status === 200) {
+        item.push(response.data.data);
+      } else {
+        console.log("Can not find item");
+      }
+    }
+    setFullItem(item);
+  };
 
-useEffect(() => {
-  if (data.ratings && data.ratings.length > 0) {
-    const total = data.ratings.reduce((acc, rate) => acc + rate.rating, 0);
-    setAverageRating((total / data.ratings.length).toFixed(1));
-  } else {
-    setAverageRating(null);
-  }
-}, [data]);
+  useEffect(() => {
+    fetchProduct();
+    fetchRecommendations();
+    window.scrollTo(0, 0);
+  }, [id]);
+
+  useEffect(() => {
+    if (data.ratings && data.ratings.length > 0) {
+      const total = data.ratings.reduce((acc, rate) => acc + rate.rating, 0);
+      setAverageRating((total / data.ratings.length).toFixed(1));
+    } else {
+      setAverageRating(null);
+    }
+  }, [data]);
 
   const onChangeHandler = (event) => {
     let value = event.target.value;
@@ -221,7 +221,10 @@ useEffect(() => {
                     className="Btn Btn--normal--product__information"
                     onClick={() => addToCart(id, size, quantity)}
                   >
-                    <FontAwesomeIcon icon={faCartPlus} className="product__information--add--product--icon" />
+                    <FontAwesomeIcon
+                      icon={faCartPlus}
+                      className="product__information--add--product--icon"
+                    />
 
                     <span className="product__information--add--product--name">
                       Thêm vào giỏ hàng
@@ -265,30 +268,33 @@ useEffect(() => {
                 })}
               </>
             ) : (
-              <span>Không có đánh giá</span>
+              <span className="Product-Rating__List-Empty">
+                Không có đánh giá
+              </span>
             )}
           </div>
           <div className="recommend-item">
-              <h2>Gợi ý</h2>
-              <hr />
-              <div className="recommend-list">
-                  {fullItem.length > 0 ? (
-                      fullItem.map((item) => (
-                        <div key={item._id} className="col l-2-4 m-4 c-6">
-                          <ProductItem 
-                            id={item._id}
-                            name={item.name}
-                            description={item.description}
-                            price={item.price}
-                            image={item.picture}
-                            selling={item.selling}
-                          />
-                        </div>
-                      ))
-                  ) : (
-                      <p>Không có gợi ý nào</p>
-                  )}
-              </div>
+            <h2>Gợi ý</h2>
+            <div className="col l-12 m-12 c-12 recommend-list">
+              {fullItem.length > 0 ? (
+                <div className="row sm--gutter">
+                  {fullItem.map((item, index) => (
+                    <div className="col l-2-4 m-4 c-6" key={index}>
+                      <ProductItem
+                        id={item._id}
+                        name={item.name}
+                        description={item.description}
+                        price={item.price}
+                        image={item.picture}
+                        selling={item.selling}
+                      />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="recommend-list-empty">Không có gợi ý nào</p>
+              )}
+            </div>
           </div>
         </div>
       </div>
