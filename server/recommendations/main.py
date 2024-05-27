@@ -51,7 +51,7 @@ def pong():
     return {"ping": "pong!"}
 
 # Lấy các gợi ý từ tên mặt hàng và tên người dùng
-@app.get("/recommend/")
+@app.get("/recommend")
 async def get_recommendations(product_id):
     # Gọi hàm recommend để lấy các gợi ý dựa trên tên mặt hàng và tên người dùng
     recommendations = recommendation(product_id=product_id, df=df)
