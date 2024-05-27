@@ -7,7 +7,7 @@
   "scripts": {
     "server": "concurrently \"nodemon app.js\" \"npm run model\"",
     "build": "npm install --prefix ./client && npm run build --prefix ./client && npm install && pip install -r recommendations/requirements.txt",
-    "model": "cd recommendations && python -m uvicorn main:app --host 0.0.0.0 --port 4040 --reload"
+    "model": "cd recommendations && python -m uvicorn main:app --host 0.0.0.0 --port 8000"
   },
   "author": "",
   "license": "ISC",

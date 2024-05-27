@@ -32,7 +32,7 @@ const Product = () => {
   const fetchRecommendations = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:4040/?product_id=${id}`
+        `https://ecommerceshop-rtet.onrender.com/recommendations?product_id=${id}`
       );
 
       if (response.status === 200) {
