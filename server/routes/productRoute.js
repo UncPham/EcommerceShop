@@ -1,5 +1,5 @@
 import express from 'express'
-import { addProduct, listProduct, removeProduct, getProductById, addComment, recommendations } from '../controllers/productController.js'
+import { addProduct, listProduct, removeProduct, getProductById, addComment } from '../controllers/productController.js'
 import authMiddleware from "../middleware/auth.js"
 import multer from 'multer'
 
