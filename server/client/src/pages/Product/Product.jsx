@@ -88,6 +88,10 @@ const Product = () => {
 // Hàm tính toán độ tương tự dựa trên mô tả
 const calculateDescriptionSimilarity = (desc1, desc2) => {
 
+    if (!desc1 || !desc2) {
+      return 0; // Trả về 0 nếu một trong hai mô tả không tồn tại
+    }
+
     const words1 = desc1.split(" ");
     const words2 = desc2.split(" ");
 
