@@ -15,7 +15,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Hoặc bạn có thể kết nối đến MongoDB trên đám mây với URI
 client = MongoClient('mongodb+srv://admin:admin@cluster0.7lohanj.mongodb.net/')
 
 # Truy cập vào cơ sở dữ liệu

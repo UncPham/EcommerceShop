@@ -9,6 +9,20 @@ import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
 import ProductItem from "../../components/productItem/ProductItem.jsx";
 
 const Product = () => {
+
+  const stopWordsVietnamese = [
+    'và', 'hay', 'là', 'của', 'từ', 'một', 'cái', 'người', 'cho', 'được', 'có', 'trong',
+    'đã', 'cũng', 'để', 'không', 'với', 'là', 'làm', 'vào', 'như', 'ở', 'đến', 'này', 'nơi',
+    'khi', 'nào', 'nếu', 'sau', 'mà', 'các', 'lên', 'bị', 'ra', 'nên', 'đang', 'hay', 'thì',
+    'việc', 'lại', 'có', 'thể', 'cũng', 'nhiều', 'đây', 'về', 'trước', 'qua', 'rằng', 'đó',
+    'tại', 'nếu', 'sự', 'là', 'nên', 'để', 'phải', 'chỉ', 'còn', 'hoặc', 'thậm', 'chí', 'đều',
+    'vẫn', 'thế', 'nào', 'tất', 'cả', 'đều', 'mình', 'chưa', 'ai', 'nói', 'chúng', 'ta', 'tôi',
+    'biết', 'điều', 'gì', 'làm', 'nên', 'đi', 'lại', 'một', 'cách', 'thường', 'nhưng', 'vẫn',
+    'nên', 'làm', 'nên', 'làm', 'tại', 'sao', 'đâu', 'mình', 'tôi', 'tớ', 'cậu', 'mày', 'mầy',
+    'tao', 'mày', 'nó', 'nó', 'cậu', 'ta', 'tui', 'tui', 'nó', 'chúng', 'nó', 'họ', 'họ', 'chúng',
+    'bọn', 'họ', 'chúng', 'bọn', 'họ', 'chúng', 'tui', 'bọn', 'tui', 'bọn', 'họ', 'họ', 'mình', 'tui'
+];
+
   const { id } = useParams();
 
   const { addToCart, url } = useContext(StoreContext);
@@ -31,20 +45,59 @@ const Product = () => {
 
   const fetchRecommendations = async () => {
     try {
-      const response = await axios.get(
-        `https://ecommerceshop-rtet.onrender.com:4040/recommendations?product_id=${id}`
-      );
-
-      if (response.status === 200) {
-        setRecommendations(response.data.recommendations);
-        fetchItem(response.data.recommendations);
+      const response = await axios.get(url + `/api/product/list`);
+  
+      if (response.data.success) {
+        const products = response.data.data;
+  
+        // Tính điểm tương tự giữa các sản phẩm
+        const similarities = products.map(product => ({
+          _id: product._id,
+          similarity: calculateSimilarity(data, product)
+        }));
+  
+        // Sắp xếp các sản phẩm dựa trên điểm tương tự
+        const sortedSimilarities = similarities
+          .filter(sim => sim._id !== id)
+          .sort((a, b) => b.similarity - a.similarity);
+  
+        // Lựa chọn các sản phẩm tương tự nhất
+        const recommendedProducts = sortedSimilarities.slice(0, 10).map(sim => sim._id);
+  
+        setRecommendations(recommendedProducts);
+        fetchItem(recommendedProducts);
       } else {
-        console.log("Error fetching recommendations");
+        console.log(response.data.message);
       }
     } catch (error) {
       console.log("Error:", error);
     }
   };
+
+  const calculateSimilarity = (product1, product2) => {
+    // Tính toán điểm tương tự dựa trên các yếu tố
+    const sexSimilarity = product1.sex === product2.sex ? 1 : 0;
+    const categorySimilarity = product1.category === product2.category ? 1 : 0;
+    const descriptionSimilarity = calculateDescriptionSimilarity(product1.description, product2.description);
+
+    // Tổng hợp điểm tương tự từ các yếu tố
+    const totalSimilarity = (sexSimilarity + categorySimilarity + descriptionSimilarity) / 3;
+    return totalSimilarity;
+};
+
+// Hàm tính toán độ tương tự dựa trên mô tả
+const calculateDescriptionSimilarity = (desc1, desc2) => {
+
+    const words1 = desc1.split(" ");
+    const words2 = desc2.split(" ");
+
+    const commonWords = words1.filter(word => words2.includes(word));
+
+    // Tính toán tỷ lệ số từ chung so với tổng số từ
+    const similarity = commonWords.length / Math.max(words1.length, words2.length);
+
+    return similarity;
+};
 
   const fetchItem = async (list) => {
     const item = [];

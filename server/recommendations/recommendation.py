@@ -4,6 +4,37 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import LabelEncoder, MinMaxScaler
 from underthesea import word_tokenize
 from bson import ObjectId
+from pymongo import MongoClient
+import pandas as pd
+
+client = MongoClient('mongodb+srv://admin:admin@cluster0.7lohanj.mongodb.net/')
+
+# Truy cập vào cơ sở dữ liệu
+db = client['test']
+
+# Truy cập vào collection
+collection = db['products']
+
+# Lấy các documents từ collection
+documents = collection.find()
+
+# Tạo một danh sách chứa dữ liệu từ MongoDB
+data = []
+for doc in documents:
+    data.append({
+        '_id': str(doc.get('_id')),
+        'name': doc.get('name'),
+        'ratings': doc.get('ratings'),
+        'sex': doc.get('sex'),
+        'category': doc.get('category'),
+        'description': doc.get('description')
+    })
+
+# Tạo DataFrame từ danh sách dữ liệu
+df = pd.DataFrame(data)
+
+# Đóng kết nối
+client.close()
 
 stop_words_vietnamese = [
     'và', 'hay', 'là', 'của', 'từ', 'một', 'cái', 'người', 'cho', 'được', 'có', 'trong',
@@ -18,7 +49,7 @@ stop_words_vietnamese = [
     'bọn', 'họ', 'chúng', 'bọn', 'họ', 'chúng', 'tui', 'bọn', 'tui', 'bọn', 'họ', 'họ', 'mình', 'tui'
 ]
 
-def recommendation(product_id, df):
+def recommendation(product_id):
     # Chuẩn hóa văn bản trong cột 'description'
     df['description'] = df['description'].str.lower()
 
